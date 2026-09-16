@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#10141d" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Treino • Costas & Braços</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0d1017;
+      --card: rgba(255,255,255,.075);
+      --card-strong: rgba(255,255,255,.12);
+      --line: rgba(255,255,255,.12);
+      --text: #f5f7fb;
+      --muted: #aab2c2;
+      --accent: #f6d365;
+      --accent-2: #6ee7d0;
+      --yellow: #f6d365;
+      --danger: #ff758f;
+      --shadow: 0 20px 55px rgba(0,0,0,.3);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; min-height: 100vh; color: var(--text);
+      font-family: "Cascadia Code", "Cascadia Mono", Consolas, monospace;
+      background: #2c3e50;  /* fallback for old browsers */
+      background: -webkit-linear-gradient(to right, #3498db, #2c3e50);  /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(to right, #3498db, #2c3e50); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input { font: inherit; }
+    button { border: 0; color: inherit; cursor: pointer; }
+    .app { width: min(100%, 720px); margin: 0 auto; padding: calc(20px + env(safe-area-inset-top)) 18px calc(110px + env(safe-area-inset-bottom)); }
+    .topbar { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:22px; }
+    .eyebrow { color: var(--yellow); text-transform: uppercase; letter-spacing: .13em; font-size: 11px; font-weight: 800; }
+    h1, h2, h3, .summary-title, .percent, .stat b, .time { font-family: "Ubuntu", "Ubuntu Light", Arial, sans-serif; font-weight: 300; }
+    h1 { margin: 7px 0 0; font-size: clamp(27px, 7vw, 42px); letter-spacing: -.045em; line-height: 1; }
+    .date { color: var(--yellow); font-size: 13px; margin-top: 9px; }
+    .icon-btn { width:43px; height:43px; border-radius: 15px; background: var(--card); border:1px solid var(--line); backdrop-filter: blur(18px); display:grid; place-items:center; font-size:19px; box-shadow:var(--shadow); }
+    .glass { background: linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.045)); border: 1px solid var(--line); box-shadow: var(--shadow); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px); }
+    .summary { border-radius:25px; padding:20px; margin-bottom:18px; overflow:hidden; position:relative; }
+    .summary:after { content:""; position:absolute; width:145px; height:145px; right:-35px; top:-55px; border-radius:50%; background:var(--accent); opacity:.15; filter:blur(7px); }
+    .summary-head { display:flex; justify-content:space-between; align-items:center; position:relative; z-index:1; }
+    .summary-title { font-size:15px; font-weight:750; }
+    .percent { font-size:25px; font-weight:300; color:var(--yellow); }
+    .bar { height:9px; background:rgba(0,0,0,.25); border-radius:99px; overflow:hidden; margin:15px 0 17px; }
+    .bar > span { display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); border-radius:inherit; transition:width .45s ease; }
+    .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+    .stat { padding:11px 12px; border-radius:16px; background:rgba(0,0,0,.18); }
+    .stat b { display:block; font-size:18px; }
+    .stat small { color:var(--muted); font-size:11px; }
+    .section-label { margin:22px 4px 10px; display:flex; justify-content:space-between; align-items:center; }
+    .section-label h2 { font-size:16px; margin:0; }
+    .section-label span { color:var(--muted); font-size:12px; }
+    .exercise { border-radius:22px; padding:16px; margin:10px 0; transition: transform .2s ease, border-color .2s ease; }
+    .exercise.done { border-color:rgba(110,231,208,.65); background:linear-gradient(135deg,rgba(110,231,208,.13),rgba(255,255,255,.045)); }
+    .exercise-row { display:flex; align-items:center; gap:12px; }
+    .number { flex:0 0 32px; height:32px; display:grid; place-items:center; border-radius:11px; background:rgba(246,211,101,.18); color:var(--yellow); font-weight:800; font-size:13px; }
+    .exercise h3 { margin:0; font-size:16px; letter-spacing:-.01em; }
+    .prescription { color:var(--muted); font-size:12px; margin-top:4px; }
+    .check { margin-left:auto; width:29px; height:29px; border:1px solid var(--line); border-radius:10px; background:rgba(0,0,0,.16); display:grid; place-items:center; font-size:16px; transition:.2s; }
+    .done .check { background:var(--accent-2); color:#0e2825; border-color:var(--accent-2); }
+    .timer { display:flex; align-items:center; gap:9px; margin-top:16px; padding-top:14px; border-top:1px solid rgba(255,255,255,.08); }
+    .time { min-width:67px; font-variant-numeric:tabular-nums; font-size:18px; font-weight:750; letter-spacing:.03em; }
+    .timer-btn { height:37px; padding:0 13px; border-radius:12px; background:rgba(255,255,255,.1); border:1px solid var(--line); font-size:12px; font-weight:750; display:flex; align-items:center; gap:6px; }
+    .timer-btn.primary { background:var(--yellow); color:#25313d; border-color:transparent; }
+    .timer-btn.stop { color:#ffb3c1; }
+    .round { margin-left:auto; color:var(--muted); font-size:11px; }
+    .bottom-nav { position:fixed; left:50%; bottom:calc(14px + env(safe-area-inset-bottom)); transform:translateX(-50%); width:min(calc(100% - 28px), 480px); padding:8px; border-radius:20px; display:flex; justify-content:space-around; z-index:5; background:rgba(24,28,39,.78); border:1px solid var(--line); backdrop-filter:blur(25px); box-shadow:0 12px 30px rgba(0,0,0,.4); }
+    .nav-item { background:none; color:var(--muted); padding:8px 17px; border-radius:14px; font-size:11px; display:flex; flex-direction:column; align-items:center; gap:4px; }
+    .nav-item.active { color:var(--text); background:rgba(255,255,255,.1); }
+    .nav-icon { font-size:19px; line-height:1; }
+    .toast { position:fixed; left:50%; bottom:93px; transform:translate(-50%,20px); opacity:0; pointer-events:none; background:#f4f5fa; color:#141721; padding:12px 16px; border-radius:14px; font-size:13px; font-weight:700; transition:.25s; z-index:10; white-space:nowrap; }
+    .toast.show { transform:translate(-50%,0); opacity:1; }
+    @media (min-width: 600px) { .app { padding-top:44px; } .exercise:hover { transform:translateY(-2px); } }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div><div class="eyebrow">Plano de hoje</div><h1>Costas & Braços</h1><div class="date" id="date"></div></div>
+      <button class="icon-btn" id="resetBtn" aria-label="Reiniciar treino" title="Reiniciar treino">↻</button>
+    </header>
+
+    <section class="summary glass" id="dashboard">
+      <div class="summary-head"><div class="summary-title">Realizado × Programado</div><div class="percent" id="percent">0%</div></div>
+      <div class="bar"><span id="progress"></span></div>
+      <div class="stats">
+        <div class="stat"><b id="doneCount">0</b><small>realizados</small></div>
+        <div class="stat"><b id="totalCount">7</b><small>programados</small></div>
+        <div class="stat"><b id="timeTotal">00:00</b><small>tempo total</small></div>
+      </div>
+    </section>
+
+    <div class="section-label"><h2>Sequência do treino</h2><span>toque no ✓ ao concluir</span></div>
+    <section id="exerciseList"></section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Navegação principal">
+    <button class="nav-item active" data-target="dashboard"><span class="nav-icon">⌂</span>Resumo</button>
+    <button class="nav-item" data-target="exerciseList"><span class="nav-icon">▤</span>Exercícios</button>
+  </nav>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const exercises = [
+      { name:'Puxada aberta', prescription:'3 séries • 10 kg × 12 reps' },
+      { name:'Puxada triângulo', prescription:'3 séries • 10 kg × 12 reps' },
+      { name:'Remada curvada', prescription:'3 séries • 10 kg × 12 reps' },
+      { name:'Remada aberta', prescription:'3 séries • 10 kg × 12 reps' },
+      { name:'Rosca direita', prescription:'3 séries • 10 kg × 12 reps' },
+      { name:'Rosca 45 no banco', prescription:'3 séries • 10 kg × 12 reps' },
+      { name:'Abdominal supra', prescription:'3 séries • 12 kg × 15 reps' }
+    ];
+    const state = JSON.parse(localStorage.getItem('treino-costas-bracos') || '{}');
+    state.done = state.done || [];
+    state.seconds = state.seconds || {};
+    let activeTimer = null, timerInterval = null;
+    const $ = id => document.getElementById(id);
+
+    $('date').textContent = new Intl.DateTimeFormat('pt-BR', { weekday:'long', day:'numeric', month:'long' }).format(new Date());
+    $('totalCount').textContent = exercises.length;
+
+    function save(){ localStorage.setItem('treino-costas-bracos', JSON.stringify(state)); }
+    function format(sec){ return String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0'); }
+    function render(){
+      $('exerciseList').innerHTML = exercises.map((ex,i) => `
+        <article class="exercise glass ${state.done.includes(i)?'done':''}" id="ex-${i}">
+          <div class="exercise-row">
+            <div class="number">${String(i+1).padStart(2,'0')}</div>
+            <div><h3>${ex.name}</h3><div class="prescription">${ex.prescription}</div></div>
+            <button class="check" data-check="${i}" aria-label="Marcar ${ex.name} como realizado">${state.done.includes(i)?'✓':''}</button>
+          </div>
+          <div class="timer">
+            <div class="time" id="time-${i}">${format(state.seconds[i] || 0)}</div>
+            <button class="timer-btn primary" data-start="${i}">▶ Iniciar</button>
+            <button class="timer-btn stop" data-stop="${i}">■ Parar</button>
+            <span class="round">cronômetro</span>
+          </div>
+        </article>`).join('');
+      updateDashboard();
+    }
+    function updateDashboard(){
+      const done = state.done.length, total = exercises.length, pct = Math.round(done/total*100);
+      $('doneCount').textContent = done; $('percent').textContent = pct+'%'; $('progress').style.width = pct+'%';
+      const totalSeconds = Object.values(state.seconds).reduce((a,b)=>a+Number(b||0),0); $('timeTotal').textContent = format(totalSeconds);
+    }
+    function toggleDone(i){
+      state.done = state.done.includes(i) ? state.done.filter(x=>x!==i) : [...state.done,i]; save(); render();
+      showToast(state.done.includes(i) ? 'Exercício marcado como realizado' : 'Exercício reaberto');
+    }
+    function start(i){
+      stop(); activeTimer = i; timerInterval = setInterval(()=>{ state.seconds[i]=(state.seconds[i]||0)+1; $('time-'+i).textContent=format(state.seconds[i]); updateDashboard(); save(); },1000); showToast('Cronômetro iniciado'); }
+    function stop(){ if(timerInterval){ clearInterval(timerInterval); timerInterval=null; activeTimer=null; showToast('Cronômetro parado'); } }
+    function showToast(msg){ const el=$('toast'); el.textContent=msg; el.classList.add('show'); clearTimeout(showToast.t); showToast.t=setTimeout(()=>el.classList.remove('show'),1800); }
+    document.addEventListener('click', e=>{
+      const check=e.target.closest('[data-check]'), startBtn=e.target.closest('[data-start]'), stopBtn=e.target.closest('[data-stop]');
+      if(check) toggleDone(Number(check.dataset.check));
+      if(startBtn) start(Number(startBtn.dataset.start));
+      if(stopBtn) stop();
+      const nav=e.target.closest('[data-target]'); if(nav){ document.getElementById(nav.dataset.target).scrollIntoView({behavior:'smooth'}); document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active')); nav.classList.add('active'); }
+    });
+    $('resetBtn').addEventListener('click',()=>{ if(confirm('Reiniciar realizados e cronômetros?')){ stop(); state.done=[]; state.seconds={}; save(); render(); showToast('Treino reiniciado'); } });
+    render();
+  </script>
+</body>
+</html>
